@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>360 Viewer</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; }
+        #panorama { width: 100%; height: 100%; }
+    </style>
+</head>
+<body>
+
+<div id="panorama"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+<script>
+    // Función para obtener parámetros de la URL
+    function getParameterByName(name) {
+        const url = window.location.href;
+        const nameEncoded = name.replace(/[\[\]]/g, '\\$&');
+        const regex = new RegExp('[?&]' + nameEncoded + '(=([^&#]*)|&|#|$)');
+        const results = regex.exec(url);
+        if (!results || !results[2]) return null;
+        return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    }
+
+    // Obtener los parámetros 'panorama' y 'preview' de la URL
+    const panoramaUrl = getParameterByName('panorama');
+    const previewUrl = getParameterByName('preview');
+
+    if (panoramaUrl) {
+        // Configuración del visor
+        const config = {
+            "type": "equirectangular",
+            "panorama": panoramaUrl,
+            "autoLoad": true, // Carga automáticamente el panorama
+            // Puedes agregar más opciones aquí si lo deseas
+        };
+
+        // Si se proporciona una imagen de previsualización, añadirla a la configuración
+        if (previewUrl) {
+            config.preview = previewUrl;
+        }
+
+        // Inicializar el visor
+        pannellum.viewer('panorama', config);
+    } else {
+        document.getElementById('panorama').innerHTML = "<p style='color: red; text-align: center; padding-top: 20%;'>No 360 photo specified.</p>";
+    }
+</script>
+
+</body>
+</html>
